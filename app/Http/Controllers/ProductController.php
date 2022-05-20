@@ -52,6 +52,7 @@ class ProductController extends Controller
         RecordProducts::create([
             'id_product'=>$code_id,
             'income'=>$request->stok_produk,
+            'editedBy'=>auth()->user()->level,
         ]);
 
         Products::create([
@@ -60,6 +61,7 @@ class ProductController extends Controller
             'kategori_produk'=>$request->kategori_produk,
             'stok_produk'=>$request->stok_produk,
             'gambar_produk'=>$imageName,
+            'catatan'=>$request->catatan ? $request->catatan : "-",
         ]);
         return redirect('product')->with('toast_success', 'Data Created Successfully!');
     }
@@ -70,10 +72,6 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -97,8 +95,6 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
-      
         $product = Products::findorfail($id);
         if($request->hasFile('gambar_produk')){
             Storage::delete(public_path('/uploads/'), $product->gambar_produk);
@@ -124,15 +120,18 @@ class ProductController extends Controller
             RecordProducts::create([
                 'id_product'=>$foreign_stock,
                 'exit'=>$change_stock,
+                'editedBy'=>auth()->user()->level,
             ]);
         }
 
         $product->update([
-            'nama_produk'=>$request->nama_produk,
-            'kategori_produk'=>$request->kategori_produk,
-            'stok_produk'=>$request->stok_produk,
+            'nama_produk'=>$request->nama_produk ? $request->nama_produk : $product->nama_produk,
+            'kategori_produk'=>$request->kategori_produk ? $request->kategori_produk : $product->kategori_produk,
+            'stok_produk'=>$request->stok_produk ? $request->stok_produk : $product->stok_produk,
             'gambar_produk'=> $request->hasFile('gambar_produk')? $imageName: $product->gambar_produk,
+            'catatan' =>  $request->catatan ? $request->catatan : $product->catatan,
         ]);
+
 
         return redirect('product')->with('toast_success', 'Data Update Successfully!');
     }

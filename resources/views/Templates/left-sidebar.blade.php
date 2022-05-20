@@ -38,7 +38,7 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
              with font-awesome or any other icon font library -->
-                @if (auth()->user()->level == 'admin')
+                @if (auth()->user()->level == 'admin' || auth()->user()->level == 'super-admin')
                     <a href="{{ route('getStock') }}" class="nav-link d-flex">
                         <span class="iconify" data-icon="healthicons:rdt-result-out-stock"
                             style="font-size:24px; margin-right: 10px;"></span>
@@ -63,7 +63,7 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        @if (auth()->user()->level == 'admin')
+                        @if (auth()->user()->level == 'admin' || auth()->user()->level == 'super-admin')
                             <li class="nav-item">
                                 <a href="{{ route('getRecordProduct') }}" class="nav-link d-flex">
                                     <span class="iconify" data-icon="eva:car-fill"
@@ -82,13 +82,14 @@
                 </li>
 
                 <li class="nav-item">
+                    @if (auth()->user()->level == 'super-admin')
                     <a href="{{ route('register') }}" class="nav-link">
                         <span class="iconify" data-icon="akar-icons:person-add"
                             style="font-size:22px; margin-right: 10px;"></span>
                         Register Admin
                     </a>
+                    @endif
                 </li>
-
 
                 <li class="nav-item">
                     <a href="{{ route('logout') }}" class="nav-link">

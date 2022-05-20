@@ -65,6 +65,7 @@ class RecordStocksController extends Controller
                 'exit'=> $statusRequest === 'exit'? $changeValue : 0 ,
                 'income'=> $statusRequest === 'income'? $changeValue : 0 ,
                 'updated'=>$request->updatedAt,
+                'editedBy'=>auth()->user()->level,
             ]);
             $stockSelected-> update([
                 'stok_bahan'=> $statusRequest ==='income'? $countTotalStock : $countMinusStock ,

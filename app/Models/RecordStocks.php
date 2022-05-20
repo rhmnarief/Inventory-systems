@@ -14,6 +14,7 @@ class RecordStocks extends Model
         'exit',
         'income',
         'updated',
+        'editedBy'
     ];
     public $timestamps = false;
     public function stocks(){

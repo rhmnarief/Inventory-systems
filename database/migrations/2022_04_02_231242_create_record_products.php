@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('record_products', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_product');
+            $table->string('editedBy');
             $table->integer('income')->default(0);
             $table->integer('exit')->default(0);
             $table->dateTime('updated')->default(now());

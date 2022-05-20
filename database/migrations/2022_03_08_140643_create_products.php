@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('nama_produk');
             $table->string('kategori_produk');
             $table->integer('stok_produk');
+            $table->string('catatan')->default('-');
             $table->string('gambar_produk')->default('default.png');
         });
     }

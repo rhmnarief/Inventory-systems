@@ -50,9 +50,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <div class="card">
               <div class="card-header d-flex align-items-center" style="justify-content: space-between; width:auto;">
                 <h3 class="card-title">Data Penyimpanan Bahan Baku</h3>
+                @if (auth()->user()->level == 'admin')
                 <button class="btn btn-success" style="margin-left:auto;" data-toggle="modal" data-target="#inputModal" >
-                    <i class="fas fa-plus"></i>
-                </button>
+                  <i class="fas fa-plus"></i>
+               </button>
+                @endif
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -82,7 +84,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <td>{{ $item->kategori_bahan }}</td>
                         <td>{{ $item->stok_bahan }}</td>
                         <td>
+                          @if (auth()->user()->level == 'admin')
                           <a href="{{ url('edit-stock', $item->id) }}"><i class="fas fa-edit"></i></a> | <a href="{{ url('delete-stock',$item->id) }}"><i class="fas fa-trash-alt" style="color:red;"></i></a>
+                          @else
+                          <a href="{{ url('edit-stock', $item->id) }}" style="font-style: none; color: black;">
+                            Tambah Catatan
+                          </a>
+                          @endif
                         </td>
                       </tr>
                       @endforeach
@@ -116,7 +124,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <form action="{{ route('addStock') }}" method="post" enctype="multipart/form-data">
                 {{ csrf_field() }}
                   <div class="form-floating">
-                      <label for="nama_bahan">Nama Bahan Baku</label>
+                    <label for="nama_bahan">Nama Bahan Baku</label>
                     <input type="text" class="form-control" id="nama_bahan" name="nama_bahan" placeholder="Input Nama Bahan" required>
                   </div>
                   <div class="form-floating">
@@ -141,14 +149,41 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </div>
       </div>
     </section>
+
+    <section class="modal-form">
+      <div class="modal fade" id="inputComment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Form Input Bahan Baku</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-floating">
+                <label for="comment">Tambahkan Komentar</label>
+                <textarea class="form-control" id="comment" name="comment" placeholder="Tambahkan Komentar" required> </textarea>
+              </div>
+                <div class="d-flex form-floating mt-5" >
+                  <button type="submit" class="btn btn-success" style="margin-left:auto;">Kirim Komentar</button>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    @include('Templates.footer')
+
     <div class="d-block justify-content-center" style="width: 100px; length:100px ;" >
       {!! $dataStocks->links() !!}
      </div>
      <!-- /.content-wrapper -->
     </div>
-    @include('Templates.footer')
-</div>
-<!-- ./wrapper -->
+  </div>
+  <!-- ./wrapper -->
 
 
 <!-- REQUIRED SCRIPTS -->

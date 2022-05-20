@@ -14,7 +14,8 @@ class Products extends Model
         'nama_produk',
         'kategori_produk',
         'stok_produk',
-        'gambar_produk'
+        'gambar_produk',
+        'catatan',
     ];
     public $timestamps = false;
     public function record(){

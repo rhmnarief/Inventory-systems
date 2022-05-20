@@ -29,7 +29,7 @@ route::post('/postLogin',[LoginController::class, 'postLogin'])->name('postLogin
 route::get('/logout',[LoginController::class, 'logout'])->name('logout');
 
 
-route::group(['middleware' =>['auth','checkLevel:admin']], function(){
+route::group(['middleware' =>['auth','checkLevel:admin,super-admin']], function(){
     route::get('/home', [HomeController::class, 'index'])->name('home');
     route::get('/register',[LoginController::class, 'register'])->name('register');
     route::post('/register-admin',[LoginController::class, 'sendRegister'])->name('registerAdmin');
@@ -38,13 +38,13 @@ route::group(['middleware' =>['auth','checkLevel:admin']], function(){
 
 
 
-
-
     route::get('/stock', [StockController::class, 'index'])->name('getStock');
     route::post('/add-stock', [StockController::class, 'store'])->name('addStock');
     route::get('/edit-stock/{id}',[StockController::class, 'edit'])->name('editStock');
     route::put('/update-stock/{id}',[StockController::class, 'update'])->name('updateStock');
     route::get('/delete-stock/{id}',[StockController::class, 'destroy'])->name('deleteStock');
+    route::put('/comment-stock/{id}',[StockController::class, 'editComment'])->name('commentStock');
+
 
 
     route::get('/product', [ProductController::class, 'index'])->name('getProduct');
@@ -52,6 +52,8 @@ route::group(['middleware' =>['auth','checkLevel:admin']], function(){
     route::get('/edit-product/{id}',[ProductController::class, 'edit'])->name('editProduct');
     route::put('/update-product/{id}',[ProductController::class, 'update'])->name('updateProduct');
     route::get('/delete-product/{id}',[ProductController::class, 'destroy'])->name('deleteProduct');
+    route::put('/comment-product/{id}',[ProductController::class, 'editComment'])->name('commentProduct');
+
 
     route::get('/record-product', [RecordProductController::class, 'index'])->name('getRecordProduct');
     route::post('/add-record-product', [RecordProductController::class, 'store'])->name('addRecordProduct');

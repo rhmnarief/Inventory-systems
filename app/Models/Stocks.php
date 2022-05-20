@@ -14,7 +14,8 @@ class Stocks extends Model
         'nama_bahan',
         'kategori_bahan',
         'stok_bahan',
-        'gambar_bahan'
+        'gambar_bahan',
+        'catatan',
     ];
     public $timestamps = false;
     public function record(){

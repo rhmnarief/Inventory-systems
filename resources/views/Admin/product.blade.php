@@ -42,9 +42,11 @@
             <div class="card">
               <div class="card-header d-flex align-items-center" style="justify-content: space-between; width:auto;">
                 <h3 class="card-title">Data Penyimpanan Produk</h3>
+                @if (auth()->user()->level == 'admin')
                 <button class="btn btn-success" style="margin-left:auto;" data-toggle="modal" data-target="#inputModal" >
                     <i class="fas fa-plus"></i>
                 </button>
+                @endif
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -74,7 +76,13 @@
                       <td>{{ $item->kategori_produk }}</td>
                       <td>{{ $item->stok_produk }}</td>
                       <td>
+                        @if (auth()->user()->level == 'admin')
                         <a href="{{ url('edit-product', $item->id) }}"><i class="fas fa-edit"></i></a> | <a href="{{ url('delete-product',$item->id) }}"><i class="fas fa-trash-alt" style="color:red;"></i></a>
+                        @else
+                        <a href="{{ url('edit-product', $item->id) }}" style="font-style: none; color: black;">
+                          Tambah Catatan
+                        </a>
+                        @endif
                       </td>
                     </tr>
                     @endforeach

@@ -6,6 +6,7 @@ use App\Models\RecordStocks;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Stocks;
+use Illuminate\Support\Facades\Auth;
 
 class StockController extends Controller
 {
@@ -56,7 +57,9 @@ class StockController extends Controller
         RecordStocks::create([
             'id_stock'=>$code_id,
             'income'=>$request->stok_bahan,
+            'editedBy'=>auth()->user()->level,
         ]);
+      
 
         Stocks::create([
             'kode_unik'=>$code_id,
@@ -64,20 +67,11 @@ class StockController extends Controller
             'kategori_bahan'=>$request->kategori_bahan,
             'stok_bahan'=>$request->stok_bahan,
             'gambar_bahan'=>$imageName,
+            'catatan'=>$request->catatan ? $request->catatan : "-"  ,
         ]);
         return redirect('stock')->with('toast_success', 'Data Created Successfully!');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -102,6 +96,7 @@ class StockController extends Controller
     public function update(Request $request, $id)
     {
         //
+
         $stock = Stocks::findorfail($id);
         if($request->hasFile('gambar_bahan')){
             Storage::delete(public_path('/uploads/'), $stock->gambar_bahan);
@@ -116,26 +111,33 @@ class StockController extends Controller
         $current_stock = $stock->stok_bahan;
         $update_stock = $request->stok_bahan;
         $foreign_stock = $stock->kode_unik;
-        if($update_stock > $current_stock ){
-            $change_stock =  $update_stock - $current_stock;
-            RecordStocks::create([
-                'id_stock'=>$foreign_stock,
-                'income'=>$change_stock,
-            ]);
-        } elseif($update_stock < $current_stock ){
-            $change_stock =  $current_stock- $update_stock;
-            RecordStocks::create([
-                'id_stock'=>$foreign_stock,
-                'exit'=>$change_stock,
-            ]);
+        if(auth()->user()->level === 'admin'){
+            if($update_stock > $current_stock ){
+                $change_stock =  $update_stock - $current_stock;
+                RecordStocks::create([
+                    'id_stock'=>$foreign_stock,
+                    'income'=>$change_stock,
+                    'editedBy'=>auth()->user()->level,
+                ]);
+            } elseif($update_stock < $current_stock ){
+                $change_stock =  $current_stock- $update_stock;
+                RecordStocks::create([
+                    'id_stock'=>$foreign_stock,
+                    'exit'=>$change_stock,
+                    'editedBy'=>auth()->user()->level,
+                ]);
+            }
         }
-
+      
         $stock->update([
-            'nama_bahan'=>$request->nama_bahan,
-            'kategori_bahan'=>$request->kategori_bahan,
-            'stok_bahan'=>$request->stok_bahan,
+            'nama_bahan'=>$request->nama_bahan ? $request->nama_bahan : $stock->nama_bahan  ,
+            'kategori_bahan'=>$request->kategori_bahan ? $request->kategori_bahan :$stock->kategori_bahan ,
+            'stok_bahan'=>$request->stok_bahan ? $request->stok_bahan : $stock->stok_bahan,
             'gambar_bahan'=> $request->hasFile('gambar_bahan')? $imageName: $stock->gambar_bahan,
+            'catatan'=>$request->catatan ? $request->catatan : $stock->catatan,
         ]);
+
+        
 
         return redirect('stock')->with('toast_success', 'Data Update Successfully!');
     }

@@ -51,13 +51,10 @@ class LoginController extends Controller
         $current_user=auth()->user();
 
         if(Hash::check($request->old_password, $current_user->password)){
-            $current_user->update([
-                'password'=>bcrypt($request -> new_password),
-            ]);
-            return redirect()->back()->with('toast_error', 'Old Password does not match');
-
+            User::find(auth()->user()->id)->update(['password'=> bcrypt($request->new_password)]);
+            return redirect()->back()->with('toast_success', 'Password Changes Successfully');
         }else{
-            return redirect('update')->with('toast_error', 'Old Password does not match');
+            return redirect('changePassword')->with('toast_error', 'Old Password does not match');
         }
       
     }

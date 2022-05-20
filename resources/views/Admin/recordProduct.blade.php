@@ -42,9 +42,11 @@
             <div class="card">
               <div class="card-header d-flex align-items-center" style="justify-content: space-between; width:auto;">
                 <h3 class="card-title">Catatan Masuk dan Keluar Produk</h3>
+                @if (auth()->user()->level == 'admin')
                 <button class="btn btn-success" style="margin-left:auto;" data-toggle="modal" data-target="#inputModal" >
-                    <i class="fas fa-plus"></i>
+                  <i class="fas fa-plus"></i>
                 </button>
+                @endif
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -58,6 +60,7 @@
                     <th>Keluar</th>
                     <th>Tanggal</th>
                     <th>Waktu</th>
+                    <th>Diubah Oleh</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -77,6 +80,9 @@
                       </td>
                       <td>
                         <p>{{ date('h:m', strtotime($record->updated)); }}</p>
+                      </td>
+                      <td>
+                        <p>{{$record->editedBy }}</p>
                       </td>
                     </tr>
                     @endforeach

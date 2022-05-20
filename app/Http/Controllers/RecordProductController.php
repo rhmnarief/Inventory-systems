@@ -65,6 +65,7 @@ class RecordProductController extends Controller
                 'exit'=> $statusRequest === 'exit'? $changeValue : 0 ,
                 'income'=> $statusRequest === 'income'? $changeValue : 0 ,
                 'updated'=>$request->updatedAt,
+                'editedBy'=>auth()->user()->level,
             ]);
             $productSelected-> update([
                 'stok_produk'=> $statusRequest ==='income'? $countTotalStock : $countMinusStock ,

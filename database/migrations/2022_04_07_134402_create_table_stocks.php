@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('nama_bahan');
             $table->string('kategori_bahan');
             $table->integer('stok_bahan');
+            $table->string('catatan')->default('-');
             $table->string('gambar_bahan')->default('default.png');
         });
     }
